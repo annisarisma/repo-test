@@ -11,7 +11,6 @@ use App\Models\Visitor;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
 class MigrationsTest extends TestCase
@@ -33,10 +32,9 @@ class MigrationsTest extends TestCase
     public function test_column_added_to_the_table(): void
     {
         Artisan::call('migrate:fresh', ['--path' => '/database/migrations/task2']);
-        
-        User::factory()->create(['surname' => 'Testing']);
-        $this->assertTrue(Schema::hasColumn('users', 'surname'));
 
+        User::factory()->create(['surname' => 'Testing']);
+        $this->assertDatabaseHas(User::class, ['surname' => 'Testing']);
 
         $user = User::first();
         $fieldNumber = 0;
